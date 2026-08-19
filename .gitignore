@@ -1,0 +1,20 @@
+# Roblox Studio build output
+*.rbxl
+*.rbxlx
+*.rbxm
+*.rbxmx
+
+# Rojo / Rokit / Wally
+*.lock
+Packages/
+ServerPackages/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
