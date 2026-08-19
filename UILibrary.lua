@@ -27,37 +27,37 @@ local TweenService     = game:GetService("TweenService")
 local LocalPlayer      = Players.LocalPlayer
 
 -- ────────────────────────────────────────────────────────────────
--- Theme  (matches the dark Minecraft-client aesthetic)
+-- Theme  (matched to reference screenshot exactly)
 -- ────────────────────────────────────────────────────────────────
 local T = {
     -- backgrounds
-    BG          = Color3.fromRGB(15,  15,  17),   -- outermost window bg
-    ColBG       = Color3.fromRGB(17,  17,  20),   -- column background
-    ColHeader   = Color3.fromRGB(20,  20,  24),   -- header bar per column
-    ModNormal   = Color3.fromRGB(17,  17,  20),   -- module row default
-    ModHover    = Color3.fromRGB(26,  26,  32),   -- module row hovered
-    ModActive   = Color3.fromRGB(18,  36,  56),   -- module row open/settings
-    SettingsBG  = Color3.fromRGB(13,  13,  16),   -- settings panel bg
-    InputBG     = Color3.fromRGB(22,  22,  28),
+    BG          = Color3.fromRGB(12,  12,  14),   -- outermost window bg (darker)
+    ColBG       = Color3.fromRGB(16,  16,  19),   -- column background
+    ColHeader   = Color3.fromRGB(19,  19,  23),   -- header bar per column
+    ModNormal   = Color3.fromRGB(16,  16,  19),   -- module row default
+    ModHover    = Color3.fromRGB(24,  24,  30),   -- module row hovered
+    ModActive   = Color3.fromRGB(15,  45,  80),   -- module row open/settings (brighter blue)
+    SettingsBG  = Color3.fromRGB(11,  11,  14),   -- settings panel bg
+    InputBG     = Color3.fromRGB(20,  20,  26),
 
     -- accents
-    Accent      = Color3.fromRGB(0,   140, 255),
-    AccentDim   = Color3.fromRGB(0,    70, 140),
-    ToggleOff   = Color3.fromRGB(50,   50,  60),
-    SliderFill  = Color3.fromRGB(0,   140, 255),
-    SliderBG    = Color3.fromRGB(30,   30,  42),
+    Accent      = Color3.fromRGB(50,  150, 255),  -- brighter blue
+    AccentDim   = Color3.fromRGB(25,   90, 180),
+    ToggleOff   = Color3.fromRGB(55,   55,  65),
+    SliderFill  = Color3.fromRGB(50,  150, 255),
+    SliderBG    = Color3.fromRGB(28,   28,  40),
 
     -- text
-    TextPrimary = Color3.fromRGB(200, 200, 210),
-    TextDim     = Color3.fromRGB(100, 100, 120),
-    TextAccent  = Color3.fromRGB(60,  170, 255),
+    TextPrimary = Color3.fromRGB(190, 190, 205),
+    TextDim     = Color3.fromRGB(90,  90,  110),
+    TextAccent  = Color3.fromRGB(80,  180, 255),  -- brighter text when active
 
     -- misc
-    Separator   = Color3.fromRGB(28,  28,  36),
+    Separator   = Color3.fromRGB(26,  26,  34),
     Shadow      = Color3.fromRGB(0,    0,   0),
 
-    -- fonts
-    Font        = Enum.Font.Code,
+    -- fonts (Gotham is sharper, closer to photo)
+    Font        = Enum.Font.Gotham,
     FontBold    = Enum.Font.GothamBold,
 }
 
@@ -163,7 +163,7 @@ function UILibrary:CreateWindow(opts)
     make("UIListLayout", {
         FillDirection = Enum.FillDirection.Horizontal,
         SortOrder     = Enum.SortOrder.LayoutOrder,
-        Padding       = UDim.new(0, 1),  -- 1px gap between columns
+        Padding       = UDim.new(0, 5),  -- 5px gap between columns (separated like photo)
     }, colContainer)
 
     -- ── Settings panel ─────────────────────────
@@ -330,10 +330,18 @@ function UILibrary:CreateWindow(opts)
             Size             = UDim2.new(1, 0, 0, COL_HEADER_H),
         }, col)
 
-        -- category icon (small symbol left side, like "⁂" or "✦")
+        -- category icon (small symbol left side, matching photo style)
         local ICONS = {
-            COMBAT="⚔", MOVEMENT="⚡", VISUAL="👁", MISC="⚙",
-            RENDER="◈", CLIENT="⚒", SEARCH="⌕",
+            COMBAT    = "⚔",  -- sword
+            MOVEMENT  = "≡",  -- triple bar
+            VISUAL    = "◈",  -- diamond
+            MISC      = "≡",  -- triple bar
+            RENDER    = "◈",  -- diamond
+            CLIENT    = "✦",  -- star
+            SEARCH    = "⌕",  -- search symbol
+            DONUT     = "◉",  -- circle dot
+            BASEFINDING = "◎", -- target
+            RENDER    = "◈",
         }
         local icon = ICONS[string.upper(name)] or "◉"
 
@@ -344,20 +352,20 @@ function UILibrary:CreateWindow(opts)
             Size                   = UDim2.new(1, -24, 1, 0),
             Text                   = icon .. " " .. string.upper(name),
             TextColor3             = T.TextAccent,
-            TextSize               = 9,
+            TextSize               = 10,  -- slightly bigger
             Font                   = T.FontBold,
             TextXAlignment         = Enum.TextXAlignment.Left,
             TextTruncate           = Enum.TextTruncate.AtEnd,
         }, header)
 
-        -- "—" minimize button on right (visual only, like photo 2)
+        -- "—" minimize button on right (bigger, more visible like photo)
         make("TextLabel", {
             BackgroundTransparency = 1,
-            Position               = UDim2.new(1, -16, 0, 0),
-            Size                   = UDim2.new(0, 14, 1, 0),
+            Position               = UDim2.new(1, -18, 0, 0),
+            Size                   = UDim2.new(0, 16, 1, 0),
             Text                   = "—",
             TextColor3             = T.TextDim,
-            TextSize               = 8,
+            TextSize               = 10,  -- bigger
             Font                   = T.FontBold,
         }, header)
 
@@ -420,14 +428,14 @@ function UILibrary:CreateWindow(opts)
                 ZIndex                 = 2,
             }, row)
 
-            -- name label
+            -- name label (uppercase for consistency with photo)
             local nameLabel = make("TextLabel", {
                 BackgroundTransparency = 1,
                 Position       = UDim2.new(0, 6, 0, 0),
                 Size           = UDim2.new(1, -22, 1, 0),
-                Text           = string.upper(modName),
+                Text           = modName,  -- keep original casing
                 TextColor3     = T.TextPrimary,
-                TextSize       = 9,
+                TextSize       = 10,  -- slightly bigger for readability
                 Font           = T.Font,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 TextTruncate   = Enum.TextTruncate.AtEnd,
