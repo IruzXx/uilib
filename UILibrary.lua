@@ -27,48 +27,48 @@ local TweenService     = game:GetService("TweenService")
 local LocalPlayer      = Players.LocalPlayer
 
 -- ────────────────────────────────────────────────────────────────
--- Theme  (matched to reference screenshot exactly)
+-- Theme  (matched to user's screenshot exactly)
 -- ────────────────────────────────────────────────────────────────
 local T = {
-    -- backgrounds
-    BG          = Color3.fromRGB(12,  12,  14),   -- outermost window bg (darker)
-    ColBG       = Color3.fromRGB(16,  16,  19),   -- column background
-    ColHeader   = Color3.fromRGB(19,  19,  23),   -- header bar per column
-    ModNormal   = Color3.fromRGB(16,  16,  19),   -- module row default
-    ModHover    = Color3.fromRGB(24,  24,  30),   -- module row hovered
-    ModActive   = Color3.fromRGB(15,  45,  80),   -- module row open/settings (brighter blue)
-    SettingsBG  = Color3.fromRGB(11,  11,  14),   -- settings panel bg
-    InputBG     = Color3.fromRGB(20,  20,  26),
+    -- backgrounds (darker, more black)
+    BG          = Color3.fromRGB(8,   8,   10),   -- outermost window bg (very dark)
+    ColBG       = Color3.fromRGB(12,  12,  15),   -- column background (black)
+    ColHeader   = Color3.fromRGB(15,  15,  18),   -- header bar per column (darker)
+    ModNormal   = Color3.fromRGB(12,  12,  15),   -- module row default
+    ModHover    = Color3.fromRGB(20,  20,  26),   -- module row hovered
+    ModActive   = Color3.fromRGB(15,  45,  80),   -- module row open/settings (bright blue)
+    SettingsBG  = Color3.fromRGB(10,  10,  13),   -- settings panel bg
+    InputBG     = Color3.fromRGB(18,  18,  24),
 
-    -- accents
-    Accent      = Color3.fromRGB(50,  150, 255),  -- brighter blue
-    AccentDim   = Color3.fromRGB(25,   90, 180),
-    ToggleOff   = Color3.fromRGB(55,   55,  65),
-    SliderFill  = Color3.fromRGB(50,  150, 255),
-    SliderBG    = Color3.fromRGB(28,   28,  40),
+    -- accents (brighter, more vibrant)
+    Accent      = Color3.fromRGB(60,  160, 255),  -- bright blue toggle ON
+    AccentDim   = Color3.fromRGB(30,  100, 190),
+    ToggleOff   = Color3.fromRGB(180, 180, 190),  -- WHITE/light gray when OFF (like photo)
+    SliderFill  = Color3.fromRGB(60,  160, 255),
+    SliderBG    = Color3.fromRGB(25,   25,  35),
 
     -- text
-    TextPrimary = Color3.fromRGB(190, 190, 205),
-    TextDim     = Color3.fromRGB(90,  90,  110),
-    TextAccent  = Color3.fromRGB(80,  180, 255),  -- brighter text when active
+    TextPrimary = Color3.fromRGB(200, 200, 215),  -- normal module text
+    TextDim     = Color3.fromRGB(80,  80,  100),  -- dim labels
+    TextAccent  = Color3.fromRGB(90,  190, 255),  -- bright blue when active
 
     -- misc
-    Separator   = Color3.fromRGB(26,  26,  34),
+    Separator   = Color3.fromRGB(22,  22,  30),
     Shadow      = Color3.fromRGB(0,    0,   0),
 
-    -- fonts (Gotham is sharper, closer to photo)
-    Font        = Enum.Font.Gotham,
+    -- fonts (bolder)
+    Font        = Enum.Font.GothamBold,  -- use bold for everything
     FontBold    = Enum.Font.GothamBold,
 }
 
 -- ────────────────────────────────────────────────────────────────
--- Layout constants  (tuned to match photo 2)
+-- Layout constants  (tuned to match photo exactly)
 -- ────────────────────────────────────────────────────────────────
 local COL_WIDTH      = 155  -- column width (px)
 local COL_HEADER_H   = 20   -- header bar height
-local MODULE_H       = 18   -- module row height
-local MODULE_PAD     = 0    -- gap between rows (tight, like photo 2)
-local TOGGLE_SIZE    = 8    -- small circle indicator
+local MODULE_H       = 16   -- module row height (thinner, like photo)
+local MODULE_PAD     = 0    -- gap between rows (tight, like photo)
+local TOGGLE_SIZE    = 7    -- smaller dot
 local SETTINGS_W     = 210  -- settings panel width
 local SETTINGS_ITEM  = 24
 
@@ -330,18 +330,16 @@ function UILibrary:CreateWindow(opts)
             Size             = UDim2.new(1, 0, 0, COL_HEADER_H),
         }, col)
 
-        -- category icon (small symbol left side, matching photo style)
+        -- category icon + X button on left (matching photo exactly)
         local ICONS = {
-            COMBAT    = "⚔",  -- sword
-            MOVEMENT  = "≡",  -- triple bar
-            VISUAL    = "◈",  -- diamond
-            MISC      = "≡",  -- triple bar
-            RENDER    = "◈",  -- diamond
-            CLIENT    = "✦",  -- star
-            SEARCH    = "⌕",  -- search symbol
-            DONUT     = "◉",  -- circle dot
-            BASEFINDING = "◎", -- target
-            RENDER    = "◈",
+            COMBAT    = "✕",  -- X icon like in photo
+            MOVEMENT  = "≡",
+            VISUAL    = "◈",
+            MISC      = "≡",
+            INPUTS    = "≡",
+            ADVANCED  = "✕",
+            TOGGLES   = "◉",
+            SEARCH    = "⌕",
         }
         local icon = ICONS[string.upper(name)] or "◉"
 
@@ -352,20 +350,20 @@ function UILibrary:CreateWindow(opts)
             Size                   = UDim2.new(1, -24, 1, 0),
             Text                   = icon .. " " .. string.upper(name),
             TextColor3             = T.TextAccent,
-            TextSize               = 10,  -- slightly bigger
+            TextSize               = 9,
             Font                   = T.FontBold,
             TextXAlignment         = Enum.TextXAlignment.Left,
             TextTruncate           = Enum.TextTruncate.AtEnd,
         }, header)
 
-        -- "—" minimize button on right (bigger, more visible like photo)
+        -- "—" minimize button on right (matching photo)
         make("TextLabel", {
             BackgroundTransparency = 1,
-            Position               = UDim2.new(1, -18, 0, 0),
-            Size                   = UDim2.new(0, 16, 1, 0),
+            Position               = UDim2.new(1, -16, 0, 0),
+            Size                   = UDim2.new(0, 14, 1, 0),
             Text                   = "—",
             TextColor3             = T.TextDim,
-            TextSize               = 10,  -- bigger
+            TextSize               = 9,
             Font                   = T.FontBold,
         }, header)
 
@@ -428,15 +426,15 @@ function UILibrary:CreateWindow(opts)
                 ZIndex                 = 2,
             }, row)
 
-            -- name label (uppercase for consistency with photo)
+            -- name label (keep title case like photo: "Aim Assist" not "AIM ASSIST")
             local nameLabel = make("TextLabel", {
                 BackgroundTransparency = 1,
                 Position       = UDim2.new(0, 6, 0, 0),
-                Size           = UDim2.new(1, -22, 1, 0),
-                Text           = modName,  -- keep original casing
+                Size           = UDim2.new(1, -20, 1, 0),
+                Text           = modName,  -- use original name (title case)
                 TextColor3     = T.TextPrimary,
-                TextSize       = 10,  -- slightly bigger for readability
-                Font           = T.Font,
+                TextSize       = 9,
+                Font           = T.Font,  -- now GothamBold
                 TextXAlignment = Enum.TextXAlignment.Left,
                 TextTruncate   = Enum.TextTruncate.AtEnd,
             }, row)
